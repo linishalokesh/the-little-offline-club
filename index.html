@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fff0f7">
+    <meta name="description" content="A tiny magical star-catching game. Play even when you're offline!">
+    <title>The Little Offline Club ♡</title>
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="background-decor">
+        <span class="cloud cloud-one">☁</span>
+        <span class="cloud cloud-two">☁</span>
+        <span class="sparkle sparkle-one">✦</span>
+        <span class="sparkle sparkle-two">✧</span>
+        <span class="sparkle sparkle-three">✦</span>
+    </div>
+
+    <header>
+        <a href="#" class="brand">♡ The Little Offline Club</a>
+        <button id="installBtn" class="install-btn" hidden>
+            ↓ Install Game
+        </button>
+    </header>
+
+    <main class="container">
+
+        <section class="welcome-screen" id="welcomeScreen">
+
+            <div class="welcome-card">
+                <div class="top-label">✧ YOUR LITTLE HAPPY PLACE ✧</div>
+
+                <div class="moon">☾</div>
+
+                <h1>Catch the Stars!</h1>
+
+                <p class="subtitle">
+                    A little magic, a little sparkle,
+                    and a whole lot of stars.
+                </p>
+
+                <div class="character">🐱</div>
+
+                <div class="instructions">
+                    <span>⭐ Catch the falling stars</span>
+                    <span>💗 Collect as many as you can</span>
+                    <span>☁ Avoid the falling clouds</span>
+                </div>
+
+                <button class="primary-btn" id="startBtn">
+                    Let's Play! ♡
+                </button>
+
+                <p class="tiny-note">No Wi-Fi? No worries. ✨</p>
+            </div>
+
+        </section>
+
+        <section class="game-screen" id="gameScreen" hidden>
+
+            <div class="game-heading">
+                <div>
+                    <span class="eyebrow">YOUR LITTLE ADVENTURE</span>
+                    <h2>Star Collector ✨</h2>
+                </div>
+
+                <button id="pauseBtn" class="pause-btn">
+                    Ⅱ Pause
+                </button>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <span>⭐ SCORE</span>
+                    <strong id="score">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>♡ LIVES</span>
+                    <strong id="lives">3</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>◷ TIME</span>
+                    <strong id="timer">45</strong>
+                </div>
+                <div class="stat-card">
+    <span>🏆 BEST</span>
+    <strong id="bestScore">0</strong>
+</div>
+            </div>
+
+            <div class="game-board" id="gameBoard">
+                <canvas id="gameCanvas" width="800" height="480"></canvas>
+
+                <div class="overlay" id="pauseOverlay" hidden>
+                    <div class="overlay-card">
+                        <div class="overlay-icon">🌙</div>
+                        <h2>Taking a tiny break?</h2>
+                        <p>Your stars are waiting!</p>
+                        <button class="primary-btn" id="resumeBtn">
+                            Continue ♡
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overlay" id="gameOverOverlay" hidden>
+                    <div class="overlay-card">
+                        <div class="overlay-icon">🌸</div>
+                        <h2>What a lovely adventure!</h2>
+                        <p>Your final score is</p>
+                        <strong class="final-score" id="finalScore">0</strong>
+                        <p id="resultMessage">You collected some magic!</p>
+                        <button class="primary-btn" id="restartBtn">
+                            Play Again ♡
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <p class="game-tip">
+                Move with ← → or A / D keys. On mobile, drag your little cat!
+            </p>
+
+        </section>
+
+        <section class="bottom-section">
+            <p>Made with ♡ and a little bit of stardust</p>
+            <span>✧ Stay cozy. Keep collecting. ✧</span>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

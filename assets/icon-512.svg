@@ -1,0 +1,8 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="112" fill="#fce5f2"/>
+    <circle cx="256" cy="256" r="184" fill="#ffffff"/>
+    <text x="256" y="320" font-size="240" text-anchor="middle">⭐</text>
+    <circle cx="100" cy="115" r="22" fill="#c8b6f0"/>
+    <circle cx="415" cy="395" r="19" fill="#a9d7ef"/>
+</svg>

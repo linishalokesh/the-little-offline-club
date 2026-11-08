@@ -1,0 +1,359 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #fff0f7, #f0edff, #e8f5ff);
+    color: #77668e;
+    overflow-x: hidden;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 7%;
+    position: relative;
+    z-index: 2;
+}
+
+.brand {
+    color: #c77ba7;
+    font-weight: 900;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.install-btn {
+    background: white;
+    color: #ae76a6;
+    border: 1px solid #f2d8ec;
+    padding: 11px 18px;
+    border-radius: 30px;
+    font-weight: 800;
+    box-shadow: 0 4px 15px #d9b7d433;
+}
+
+.container {
+    width: min(900px, 92%);
+    margin: 25px auto;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome-card {
+    background: #ffffffd9;
+    border: 1px solid white;
+    border-radius: 35px;
+    padding: 40px 20px;
+    text-align: center;
+    box-shadow: 0 15px 50px #c8afd933;
+    backdrop-filter: blur(10px);
+}
+
+.top-label, .eyebrow {
+    color: #b58bc6;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 3px;
+}
+
+.moon {
+    font-size: 55px;
+    margin: 12px;
+    color: #e9c66e;
+}
+
+h1 {
+    color: #c77ba7;
+    font-size: clamp(35px, 7vw, 57px);
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #9585a8;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.character {
+    font-size: 85px;
+    margin: 22px 0;
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+.instructions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0 27px;
+}
+
+.instructions span {
+    background: #fff3fa;
+    color: #a47c9f;
+    padding: 11px 16px;
+    border-radius: 25px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.primary-btn {
+    background: linear-gradient(110deg, #edacd0, #bca8e9);
+    color: white;
+    padding: 15px 38px;
+    border-radius: 35px;
+    font-size: 16px;
+    font-weight: 900;
+    box-shadow: 0 7px 20px #d7a9d455;
+    transition: 0.25s;
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 25px #d7a9d477;
+}
+
+.tiny-note {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #b39bb8;
+}
+
+.background-decor {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.cloud {
+    position: absolute;
+    color: #ffffff99;
+    font-size: 110px;
+    animation: float 5s infinite ease-in-out;
+}
+
+.cloud-one {
+    top: 17%;
+    left: 4%;
+}
+
+.cloud-two {
+    bottom: 8%;
+    right: 4%;
+    animation-delay: 1s;
+}
+
+.sparkle {
+    position: absolute;
+    color: #e6b5d5;
+    font-size: 30px;
+}
+
+.sparkle-one { top: 25%; right: 12%; }
+.sparkle-two { top: 60%; left: 10%; }
+.sparkle-three { bottom: 15%; right: 20%; }
+
+.game-screen {
+    background: #ffffffd9;
+    padding: 28px;
+    border-radius: 30px;
+    box-shadow: 0 15px 50px #c8afd933;
+}
+
+.game-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.game-heading h2 {
+    color: #c77ba7;
+    font-size: 25px;
+}
+
+.pause-btn {
+    padding: 11px 17px;
+    border-radius: 25px;
+    background: #f0eaff;
+    color: #927cc0;
+    font-weight: 800;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.stat-card {
+    background: #fff3fa;
+    padding: 13px;
+    border-radius: 17px;
+    text-align: center;
+}
+
+.stat-card span {
+    display: block;
+    font-size: 10px;
+    font-weight: 900;
+    color: #b28eae;
+    letter-spacing: 1px;
+}
+
+.stat-card strong {
+    display: block;
+    font-size: 23px;
+    color: #bd80ae;
+}
+
+.game-board {
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    background: #e7e9ff;
+    border: 3px solid white;
+    box-shadow: inset 0 0 20px #b9b1dd44;
+    touch-action: none;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.game-tip {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #a894b5;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: #ffffffbb;
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.overlay-card {
+    background: white;
+    border-radius: 25px;
+    padding: 28px 20px;
+    width: min(360px, 100%);
+    text-align: center;
+    box-shadow: 0 10px 30px #bba4d444;
+}
+
+.overlay-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.overlay-card h2 {
+    color: #c77ba7;
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.overlay-card p {
+    color: #a18baa;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.final-score {
+    display: block;
+    font-size: 48px;
+    color: #a48dd4;
+    margin: 8px;
+}
+
+.bottom-section {
+    text-align: center;
+    padding: 30px 10px;
+    color: #a38eae;
+    font-size: 12px;
+}
+
+.bottom-section span {
+    display: block;
+    margin-top: 7px;
+    color: #c28db6;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 18px 5%;
+    }
+
+    .brand {
+        font-size: 15px;
+    }
+
+    .container {
+        margin-top: 15px;
+    }
+
+    .welcome-card {
+        padding: 30px 15px;
+    }
+
+    .instructions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .instructions span {
+        width: 90%;
+    }
+
+    .game-screen {
+        padding: 15px;
+    }
+
+    .game-heading h2 {
+        font-size: 20px;
+    }
+
+    .stats {
+        gap: 7px;
+    }
+
+    .stat-card {
+        padding: 10px 5px;
+    }
+}
