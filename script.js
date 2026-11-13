@@ -50,10 +50,14 @@ welcomeBest.textContent = bestScore.toString().padStart(3, "0");
 
 function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    const dpr = Math.min(
+        window.devicePixelRatio || 1,
+        window.innerWidth < 600 ? 1.25 : 2
+    );
+
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
 
     ctx.setTransform(
         canvas.width / W,
