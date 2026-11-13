@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "little-offline-club-v1";
+const CACHE_NAME = "little-offline-club-v2";
 
 const FILES_TO_CACHE = [
     "./",
@@ -7,6 +7,7 @@ const FILES_TO_CACHE = [
     "./style.css",
     "./script.js",
     "./manifest.json",
+    "./assets/character.png",
     "./assets/favicon.svg",
     "./assets/icon-192.svg",
     "./assets/icon-512.svg"
