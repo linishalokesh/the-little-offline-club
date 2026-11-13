@@ -396,3 +396,35 @@ h1 span {
         height: 465px;
     }
 }
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    touch-action: none;
+}
+
+@media (max-width: 600px) {
+    body {
+        margin: 0;
+    }
+
+    #gameCanvas {
+        width: 100%;
+        height: auto;
+    }
+
+    button {
+        min-height: 44px;
+    }
+}
