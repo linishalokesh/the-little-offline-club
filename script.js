@@ -1,6 +1,6 @@
 
 const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d", { alpha: false });
 
 const welcomeScreen = document.getElementById("welcomeScreen");
 const gameScreen = document.getElementById("gameScreen");
@@ -26,38 +26,87 @@ characterImage.src = "assets/character.png";
 const backgroundImage = new Image();
 backgroundImage.src = "assets/space-background.png";
 
+const W = 900;
+const H = 495;
+
+const backgroundCanvas = document.createElement("canvas");
+backgroundCanvas.width = W;
+backgroundCanvas.height = H;
+
+const backgroundCtx = backgroundCanvas.getContext("2d");
+let backgroundReady = false;
+
+function prepareBackground() {
+    if (!backgroundImage.naturalWidth) return;
+
+    const scale = Math.max(
+        W / backgroundImage.naturalWidth,
+        H / backgroundImage.naturalHeight
+    );
+
+    const width = backgroundImage.naturalWidth * scale;
+    const height = backgroundImage.naturalHeight * scale;
+
+    backgroundCtx.drawImage(
+        backgroundImage,
+        (W - width) / 2,
+        (H - height) / 2,
+        width,
+        height
+    );
+
+    backgroundReady = true;
+}
+
+backgroundImage.addEventListener("load", prepareBackground);
+
+if (backgroundImage.complete && backgroundImage.naturalWidth) {
+    prepareBackground();
+}
+
 let score = 0;
 let lives = 3;
 let timeLeft = 45;
 let bestScore = Number(localStorage.getItem("starBest")) || 0;
 
 let player = { x: 450, y: 0, width: 76, height: 76 };
+
 let objects = [];
 let particles = [];
-
 let keys = {};
+
 let running = false;
 let paused = false;
+
 let lastTime = 0;
+let lastFrameTime = 0;
 let spawnTimer = 0;
 let elapsed = 0;
 let animationId;
 
-const W = 900;
-const H = 495;
+const FRAME_INTERVAL = 1000 / 60;
 
 welcomeBest.textContent = bestScore.toString().padStart(3, "0");
 
+// CANVAS RESIZING
+
 function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
+
+    if (!rect.width || !rect.height) return;
 
     const dpr = Math.min(
         window.devicePixelRatio || 1,
         window.innerWidth < 600 ? 1.25 : 2
     );
 
-    canvas.width = Math.round(rect.width * dpr);
-    canvas.height = Math.round(rect.height * dpr);
+    const newWidth = Math.round(rect.width * dpr);
+    const newHeight = Math.round(rect.height * dpr);
+
+    if (canvas.width !== newWidth || canvas.height !== newHeight) {
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+    }
 
     ctx.setTransform(
         canvas.width / W,
@@ -70,6 +119,9 @@ function resizeCanvas() {
 }
 
 window.addEventListener("resize", resizeCanvas);
+window.addEventListener("orientationchange", resizeCanvas);
+
+// START GAME
 
 function startGame() {
     cancelAnimationFrame(animationId);
@@ -77,8 +129,10 @@ function startGame() {
     score = 0;
     lives = 3;
     timeLeft = 45;
+
     objects = [];
     particles = [];
+
     spawnTimer = 0;
     elapsed = 0;
 
@@ -97,14 +151,20 @@ function startGame() {
     updateHUD();
 
     lastTime = performance.now();
+    lastFrameTime = lastTime;
+
     animationId = requestAnimationFrame(gameLoop);
 }
+
+// HUD
 
 function updateHUD() {
     scoreDisplay.textContent = score.toString().padStart(3, "0");
     timerDisplay.textContent = Math.ceil(timeLeft);
     livesDisplay.textContent = "♥ ".repeat(lives).trim();
 }
+
+// SPAWN OBJECTS
 
 function spawnObject() {
     const roll = Math.random();
@@ -127,59 +187,49 @@ function spawnObject() {
     });
 }
 
+// BACKGROUND
+
 function drawBackground() {
-    if (backgroundImage.complete && backgroundImage.naturalWidth > 0) {
-        const scale = Math.max(
-            W / backgroundImage.naturalWidth,
-            H / backgroundImage.naturalHeight
-        );
-
-        const width = backgroundImage.naturalWidth * scale;
-        const height = backgroundImage.naturalHeight * scale;
-
-        ctx.drawImage(
-            backgroundImage,
-            (W - width) / 2,
-            (H - height) / 2,
-            width,
-            height
-        );
+    if (backgroundReady) {
+        ctx.drawImage(backgroundCanvas, 0, 0, W, H);
     } else {
         ctx.fillStyle = "#111632";
         ctx.fillRect(0, 0, W, H);
     }
 }
 
+// DRAW OBJECTS
+
 function drawObjects() {
     objects.forEach(obj => {
         ctx.save();
+
         ctx.translate(obj.x, obj.y);
         ctx.rotate(obj.rotation);
 
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
         if (obj.type === "rock") {
             ctx.font = "30px serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
             ctx.fillText("🪨", 0, 0);
         } else if (obj.type === "special") {
             ctx.shadowColor = "#ffe69a";
-            ctx.shadowBlur = 20;
+            ctx.shadowBlur = 10;
             ctx.font = "34px serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
             ctx.fillText("🌟", 0, 0);
         } else {
             ctx.shadowColor = "#fff0a6";
-            ctx.shadowBlur = 14;
+            ctx.shadowBlur = 7;
             ctx.font = "29px serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
             ctx.fillText("⭐", 0, 0);
         }
 
         ctx.restore();
     });
 }
+
+// DRAW PLAYER
 
 function drawPlayer() {
     if (characterImage.complete && characterImage.naturalWidth > 0) {
@@ -193,6 +243,8 @@ function drawPlayer() {
     }
 }
 
+// PARTICLES
+
 function createParticles(x, y, color) {
     for (let i = 0; i < 9; i++) {
         particles.push({
@@ -204,24 +256,37 @@ function createParticles(x, y, color) {
             color
         });
     }
+
+    if (particles.length > 90) {
+        particles.splice(0, particles.length - 90);
+    }
 }
 
 function drawParticles(delta) {
-    particles.forEach(p => {
+    for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+
         p.x += p.vx * delta;
         p.y += p.vy * delta;
         p.life -= delta;
 
-        ctx.globalAlpha = Math.max(0, p.life / 0.6);
+        if (p.life <= 0) {
+            particles.splice(i, 1);
+            continue;
+        }
+
+        ctx.globalAlpha = p.life / 0.6;
         ctx.fillStyle = p.color;
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
         ctx.fill();
-    });
+    }
 
     ctx.globalAlpha = 1;
-    particles = particles.filter(p => p.life > 0);
 }
+
+// UPDATE GAME
 
 function update(delta) {
     elapsed += delta;
@@ -236,8 +301,13 @@ function update(delta) {
 
     const moveSpeed = 430;
 
-    if (keys["ArrowLeft"] || keys["a"]) player.x -= moveSpeed * delta;
-    if (keys["ArrowRight"] || keys["d"]) player.x += moveSpeed * delta;
+    if (keys["ArrowLeft"] || keys["a"]) {
+        player.x -= moveSpeed * delta;
+    }
+
+    if (keys["ArrowRight"] || keys["d"]) {
+        player.x += moveSpeed * delta;
+    }
 
     player.x = Math.max(45, Math.min(W - 45, player.x));
 
@@ -257,7 +327,7 @@ function update(delta) {
         const dx = obj.x - player.x;
         const dy = obj.y - player.y;
 
-        if (Math.sqrt(dx * dx + dy * dy) < 48) {
+        if (dx * dx + dy * dy < 48 * 48) {
             obj.collected = true;
 
             if (obj.type === "rock") {
@@ -277,42 +347,65 @@ function update(delta) {
         }
     });
 
-    objects = objects.filter(obj => !obj.collected && obj.y < H + 50);
+    objects = objects.filter(
+        obj => !obj.collected && obj.y < H + 50
+    );
 
     updateHUD();
 }
 
-function draw() {
+// DRAW GAME
+
+function draw(delta) {
     drawBackground();
     drawObjects();
     drawPlayer();
-    drawParticles(0);
+    drawParticles(delta);
 }
+
+// GAME LOOP
 
 function gameLoop(timestamp) {
     if (!running || paused) return;
 
-    const delta = Math.min((timestamp - lastTime) / 1000, 0.04);
+    if (timestamp - lastFrameTime < FRAME_INTERVAL) {
+        animationId = requestAnimationFrame(gameLoop);
+        return;
+    }
+
+    const delta = Math.min(
+        (timestamp - lastTime) / 1000,
+        0.05
+    );
+
     lastTime = timestamp;
+    lastFrameTime = timestamp;
 
     update(delta);
 
     if (!running) return;
 
-    draw();
+    draw(delta);
+
     animationId = requestAnimationFrame(gameLoop);
 }
 
+// GAME OVER
+
 function endGame() {
     running = false;
+
     cancelAnimationFrame(animationId);
 
     finalScore.textContent = score;
 
     if (score > bestScore) {
         bestScore = score;
+
         localStorage.setItem("starBest", bestScore);
+
         welcomeBest.textContent = bestScore.toString().padStart(3, "0");
+
         newRecord.textContent = "✨ A NEW PERSONAL BEST! ✨";
     } else {
         newRecord.textContent = "Your personal best: " + bestScore;
@@ -321,27 +414,38 @@ function endGame() {
     gameOverScreen.classList.remove("hidden");
 }
 
+// PAUSE
+
 function togglePause() {
     if (!running) return;
 
     paused = !paused;
 
     if (paused) {
+        cancelAnimationFrame(animationId);
+
         pauseScreen.classList.remove("hidden");
         pauseBtn.textContent = "▶";
     } else {
         pauseScreen.classList.add("hidden");
         pauseBtn.textContent = "Ⅱ";
+
         lastTime = performance.now();
+        lastFrameTime = lastTime;
+
         animationId = requestAnimationFrame(gameLoop);
     }
 }
+
+// BUTTON EVENTS
 
 startBtn.addEventListener("click", startGame);
 playAgainBtn.addEventListener("click", startGame);
 restartBtn.addEventListener("click", startGame);
 pauseBtn.addEventListener("click", togglePause);
 resumeBtn.addEventListener("click", togglePause);
+
+// KEYBOARD CONTROLS
 
 window.addEventListener("keydown", e => {
     keys[e.key] = true;
@@ -355,17 +459,22 @@ window.addEventListener("keyup", e => {
     keys[e.key] = false;
 });
 
+// TOUCH AND POINTER CONTROLS
+
 function movePlayer(e) {
     if (!running || paused) return;
 
     const rect = canvas.getBoundingClientRect();
+
     const scaleX = W / rect.width;
 
     player.x = (e.clientX - rect.left) * scaleX;
+
     player.x = Math.max(45, Math.min(W - 45, player.x));
 }
 
+canvas.addEventListener("pointerdown", movePlayer);
 canvas.addEventListener("pointermove", movePlayer);
 
 resizeCanvas();
-draw();
+draw(0);
