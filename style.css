@@ -16,6 +16,13 @@
     --muted: #9588ad;
 }
 
+html, body {
+    width: 100%;
+    min-height: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     min-height: 100vh;
     background: #e7e0f5;
@@ -41,7 +48,7 @@ body {
 }
 
 .top-bar {
-    height: 70px;
+    min-height: 70px;
     padding: 0 45px;
     display: flex;
     justify-content: space-between;
@@ -67,6 +74,8 @@ body {
     color: var(--muted);
     font-weight: 800;
 }
+
+/* WELCOME SCREEN */
 
 .welcome-screen {
     flex: 1;
@@ -241,8 +250,10 @@ h1 span {
     }
 }
 
+/* FOOTER */
+
 .footer {
-    height: 55px;
+    min-height: 55px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -303,11 +314,19 @@ h1 span {
     cursor: pointer;
 }
 
+/* CANVAS */
+
 #gameCanvas {
     display: block;
     width: 100%;
-    height: 495px;
+    max-width: 900px;
+    height: auto;
+    aspect-ratio: 900 / 495;
+    margin: 0 auto;
+    touch-action: none;
 }
+
+/* GAME OVER / PAUSE */
 
 .game-overlay {
     position: absolute;
@@ -348,18 +367,45 @@ h1 span {
     display: none !important;
 }
 
-@media (max-width: 600px) {
+/* TABLETS */
+
+@media (max-width: 900px) {
     body {
-        padding: 10px;
+        padding: 15px;
     }
 
     .game-wrapper {
-        min-height: 650px;
-        border-radius: 20px;
+        min-height: 0;
+    }
+
+    .welcome-screen {
+        min-height: 540px;
+    }
+
+    .game-screen {
+        min-height: 0;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    body {
+        padding: 0;
+        align-items: stretch;
+    }
+
+    .game-wrapper {
+        width: 100%;
+        max-width: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+        border-radius: 0;
     }
 
     .top-bar {
-        padding: 0 18px;
+        min-height: 58px;
+        padding: 0 16px;
     }
 
     .club-name {
@@ -369,10 +415,12 @@ h1 span {
 
     .game-number {
         font-size: 8px;
+        letter-spacing: 1px;
     }
 
     .welcome-screen {
-        min-height: 540px;
+        min-height: 0;
+        flex: 1;
         padding: 35px 12px;
     }
 
@@ -382,6 +430,7 @@ h1 span {
 
     .character-display img {
         max-height: 145px;
+        max-width: 190px;
     }
 
     .instruction {
@@ -389,39 +438,43 @@ h1 span {
     }
 
     .game-screen {
-        min-height: 540px;
+        min-height: 0;
+        flex: 1;
     }
 
-    #gameCanvas {
-        height: 465px;
+    .game-hud {
+        height: 65px;
     }
-}
-html, body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-}
 
-* {
-    box-sizing: border-box;
-}
+    .hud-item span {
+        font-size: 8px;
+    }
 
-#gameCanvas {
-    display: block;
-    width: 100%;
-    max-width: 900px;
-    height: auto;
-    touch-action: none;
-}
+    .hud-item strong {
+        font-size: 17px;
+    }
 
-@media (max-width: 600px) {
-    body {
-        margin: 0;
+    .pause-button {
+        width: 42px;
+        height: 42px;
     }
 
     #gameCanvas {
         width: 100%;
+        max-width: 100%;
         height: auto;
+    }
+
+    .game-overlay {
+        inset: 65px 0 0;
+    }
+
+    .game-overlay h2 {
+        font-size: 28px;
+    }
+
+    .footer {
+        min-height: 45px;
     }
 
     button {
