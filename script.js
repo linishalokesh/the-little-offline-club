@@ -301,15 +301,11 @@ function update(delta) {
 
     const moveSpeed = 430;
 
-    if (keys["ArrowLeft"] || keys["a"]) {
-        player.x -= moveSpeed * delta;
-    }
+if (keys["ArrowLeft"] || keys["a"]) targetX = player.x - moveSpeed * delta;
+if (keys["ArrowRight"] || keys["d"]) targetX = player.x + moveSpeed * delta;
 
-    if (keys["ArrowRight"] || keys["d"]) {
-        player.x += moveSpeed * delta;
-    }
-
-    player.x = Math.max(45, Math.min(W - 45, player.x));
+player.x += (targetX - player.x) * Math.min(1, delta * 14);
+player.x = Math.max(45, Math.min(W - 45, player.x));
 
     spawnTimer += delta;
 
@@ -461,17 +457,20 @@ window.addEventListener("keyup", e => {
 
 // TOUCH AND POINTER CONTROLS
 
+let targetX = W / 2;
+
 function movePlayer(e) {
     if (!running || paused) return;
 
     const rect = canvas.getBoundingClientRect();
-
     const scaleX = W / rect.width;
 
-    player.x = (e.clientX - rect.left) * scaleX;
-
-    player.x = Math.max(45, Math.min(W - 45, player.x));
+    targetX = (e.clientX - rect.left) * scaleX;
+    targetX = Math.max(45, Math.min(W - 45, targetX));
 }
+
+canvas.addEventListener("pointerdown", movePlayer);
+canvas.addEventListener("pointermove", movePlayer);
 
 canvas.addEventListener("pointerdown", movePlayer);
 canvas.addEventListener("pointermove", movePlayer);
